@@ -1,6 +1,7 @@
 package com.example.eventappproject.models;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 
 public class Event {
@@ -10,7 +11,7 @@ public class Event {
     private String location;
     private LocalDateTime date;
     private String creator; // reference in the db to the object
-    private List<String> attendees; // reference in the db to the objects
+    private HashMap<String, String> attendees; // reference in the db to the objects
 
     public Event() {
     }
@@ -70,15 +71,15 @@ public class Event {
         this.creator = creator;
     }
 
-    public List<String> getAttendees() {
+    public HashMap<String, String> getAttendees() {
         return attendees;
     }
 
-    public void setAttendees(List<String> attendees) {
+    public void setAttendees(HashMap<String, String> attendees) {
         this.attendees = attendees;
     }
 
-    public void addAttendee(String attendee) {
-        this.attendees.add(attendee);
+    public void addAttendee(String attendeeID) {
+        this.attendees.put(attendeeID, attendeeID);
     }
 }

@@ -1,5 +1,6 @@
 package com.example.eventappproject.models;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class User {
@@ -8,8 +9,8 @@ public class User {
     private String password;
     private String name;
     private String description;
-    private List<String> createdEvents; // reference in the db to the objects
-    private List<String> joinedEvents; // reference in the db to the objects
+    private HashMap<String, String> createdEvents; // reference in the db to the objects
+    private HashMap<String, String> joinedEvents; // reference in the db to the objects
 
     public User() {
     }
@@ -61,27 +62,27 @@ public class User {
         this.description = description;
     }
 
-    public List<String> getCreatedEvents() {
+    public HashMap<String, String> getCreatedEvents() {
         return createdEvents;
     }
 
-    public void setCreatedEvents(List<String> createdEvents) {
+    public void setCreatedEvents(HashMap<String, String> createdEvents) {
         this.createdEvents = createdEvents;
     }
 
-    public List<String> getJoinedEvents() {
+    public HashMap<String, String> getJoinedEvents() {
         return joinedEvents;
     }
 
-    public void setJoinedEvents(List<String> joinedEvents) {
+    public void setJoinedEvents(HashMap<String, String> joinedEvents) {
         this.joinedEvents = joinedEvents;
     }
 
-    public void addCreatedEvent(String event) {
-        this.createdEvents.add(event);
+    public void addCreatedEvent(String eventID) {
+        this.createdEvents.put(eventID, eventID);
     }
 
-    public void addJoinedEvents(String event) {
-
+    public void addJoinedEvent(String eventID) {
+        this.getJoinedEvents().put(eventID, eventID);
     }
 }

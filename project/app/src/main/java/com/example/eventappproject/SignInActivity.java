@@ -96,7 +96,7 @@ public class SignInActivity extends AppCompatActivity {
         goToRegistration.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                startActivity(new Intent(SignInActivity.this, RegisterUser.class));
+                startActivity(new Intent(SignInActivity.this, SignUpActivity.class));
             }
         });
     }
@@ -130,7 +130,8 @@ public class SignInActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-//                    startActivity(new Intent(SignInActivity.this, UserProfile.class));
+                    startActivity(new Intent(SignInActivity.this, HomePageActivity.class));
+                    finish();
                 } else {
                     Toast.makeText(SignInActivity.this, "Something went wrong! Please check your credentials!", Toast.LENGTH_SHORT).show();
                 }
