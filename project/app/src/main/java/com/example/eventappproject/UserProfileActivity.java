@@ -11,7 +11,7 @@ import android.widget.Toast;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
-public class HomePageActivity extends AppCompatActivity {
+public class UserProfileActivity extends AppCompatActivity {
 
     /* Views */
     private BottomNavigationView bottomNavigationView;
@@ -19,7 +19,7 @@ public class HomePageActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home_page);
+        setContentView(R.layout.activity_user_profile);
 
         initViews();
         initVars();
@@ -29,22 +29,23 @@ public class HomePageActivity extends AppCompatActivity {
         this.bottomNavigationView = findViewById(R.id.homePageNavView);
 
         // configure navigation bar
-        bottomNavigationView.setSelectedItemId(R.id.homeItemNavBar);
+        bottomNavigationView.setSelectedItemId(R.id.profileItemNavBar);
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
                 switch (item.getItemId()) {
                     case R.id.mapItemNavBar:
-                        Toast.makeText(HomePageActivity.this, "Map selected!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UserProfileActivity.this, "Map selected!", Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.homeItemNavBar:
-                        return true;
-                    case R.id.profileItemNavBar:
-                        Intent intent = new Intent(HomePageActivity.this, UserProfileActivity.class);
+                        Intent intent = new Intent(UserProfileActivity.this, HomePageActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                         startActivity(intent);
                         overridePendingTransition(0, 0);
+                        return true;
+                    case R.id.profileItemNavBar:
+
                         return true;
                     default:
                         return false;
@@ -61,6 +62,6 @@ public class HomePageActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        bottomNavigationView.setSelectedItemId(R.id.homeItemNavBar);
+        bottomNavigationView.setSelectedItemId(R.id.profileItemNavBar);
     }
 }

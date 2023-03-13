@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HomePageActivity">
+    tools:context=".UserProfileActivity">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/homePageCardView"
@@ -24,4 +24,5 @@
             android:layout_height="match_parent"
             app:menu="@menu/bottom_nav_menu"/>
     </androidx.cardview.widget.CardView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
