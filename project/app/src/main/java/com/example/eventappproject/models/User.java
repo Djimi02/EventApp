@@ -6,7 +6,6 @@ import java.util.List;
 public class User {
     private String dbID; // reference in the db to this object
     private String email;
-    private String password;
     private String name;
     private String description;
     private HashMap<String, String> createdEvents; // reference in the db to the objects
@@ -15,10 +14,9 @@ public class User {
     public User() {
     }
 
-    public User(String dbID, String email, String password, String name) {
+    public User(String dbID, String email, String name) {
         this.dbID = dbID;
         this.email = email;
-        this.password = password;
         this.name = name;
     }
 
@@ -36,14 +34,6 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getName() {
