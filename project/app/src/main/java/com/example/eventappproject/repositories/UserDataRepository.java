@@ -115,7 +115,7 @@ public class UserDataRepository {
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
-        })
+        });
     }
 
     public static UserDataRepository getInstance() {
