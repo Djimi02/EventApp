@@ -73,6 +73,12 @@ public class User {
     }
 
     public void addJoinedEvent(String eventID) {
-        this.getJoinedEvents().put(eventID, eventID);
+        this.joinedEvents.put(eventID, eventID);
+    }
+
+    public void removeCreatedEvent(String eventID) {this.createdEvents.remove(eventID); }
+
+    public void removeJoinedEvent(String eventID) {
+        this.joinedEvents.remove(eventID);
     }
 }

@@ -9,7 +9,8 @@ public class Event {
     private String name;
     private String description;
     private String location;
-    private LocalDateTime date;
+    private String date;
+    private String time;
     private String creator; // reference in the db to the object
     private HashMap<String, String> attendees; // reference in the db to the objects
 
@@ -21,6 +22,12 @@ public class Event {
         this.name = name;
         this.description = description;
         this.creator = creator;
+    }
+
+    public Event(String name, String date, String time) {
+        this.name = name;
+        this.date = date;
+        this.time = time;
     }
 
     public String getDbID() {
@@ -55,12 +62,20 @@ public class Event {
         this.location = location;
     }
 
-    public LocalDateTime getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(LocalDateTime date) {
+    public void setDate(String date) {
         this.date = date;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 
     public String getCreator() {

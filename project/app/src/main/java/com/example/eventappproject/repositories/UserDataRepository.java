@@ -15,6 +15,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class UserDataRepository {
@@ -23,10 +24,8 @@ public class UserDataRepository {
     private User user;
 
     private List<Event> createdEvents;
-    private List<String> createdEventsIDs;
 
     private List<Event> joinedEvents;
-    private List<String> joinedEventsIDs;
 
     private List<UserDataListener> listeners;
 
@@ -37,13 +36,11 @@ public class UserDataRepository {
 
     private UserDataRepository() {
         createdEvents = new ArrayList<>();
-        createdEventsIDs = new ArrayList<>();
         joinedEvents = new ArrayList<>();
-        joinedEventsIDs = new ArrayList<>();
         listeners = new ArrayList<>();
 
-        dbReferenceUsers = FirebaseDatabase.getInstance().getReference("https://eventapp-18029-default-rtdb.europe-west1.firebasedatabase.app/").child("Users");
-        dbReferenceEvents = FirebaseDatabase.getInstance().getReference("https://eventapp-18029-default-rtdb.europe-west1.firebasedatabase.app/").child("Events");
+        dbReferenceUsers = FirebaseDatabase.getInstance("https://eventapp-18029-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Users");
+        dbReferenceEvents = FirebaseDatabase.getInstance("https://eventapp-18029-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Events");
 
         userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -68,10 +65,8 @@ public class UserDataRepository {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 createdEvents.clear();
-                createdEventsIDs.clear();
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     String eventID = ds.getKey();
-                    createdEventsIDs.add(eventID);
 
                     // find and retrieves the event as object
                     dbReferenceEvents.child(eventID).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -95,10 +90,8 @@ public class UserDataRepository {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 joinedEvents.clear();
-                joinedEventsIDs.clear();
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     String eventID = ds.getKey();
-                    joinedEventsIDs.add(eventID);
 
                     // find and retrieves the event as object
                     dbReferenceEvents.child(eventID).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -118,6 +111,9 @@ public class UserDataRepository {
         });
     }
 
+    /**
+     * @return an instance of this class
+     */
     public static UserDataRepository getInstance() {
         if (instance == null) {
             instance = new UserDataRepository();
@@ -125,6 +121,9 @@ public class UserDataRepository {
         return instance;
     }
 
+    /**
+     * Deletes the existing instance.
+     */
     public static void deleteCurrentInstance() {
         instance = null;
     }
@@ -179,13 +178,6 @@ public class UserDataRepository {
         this.createdEvents = createdEvents;
     }
 
-    public List<String> getCreatedEventsIDs() {
-        return createdEventsIDs;
-    }
-
-    public void setCreatedEventsIDs(List<String> createdEventsIDs) {
-        this.createdEventsIDs = createdEventsIDs;
-    }
 
     public List<Event> getJoinedEvents() {
         return joinedEvents;
@@ -195,11 +187,51 @@ public class UserDataRepository {
         this.joinedEvents = joinedEvents;
     }
 
-    public List<String> getJoinedEventsIDs() {
-        return joinedEventsIDs;
+    /**
+     * Adds a new event in the db.
+     * @param event - the event data to be added in the db
+     */
+    public void addNewEventInDB(Event event) {
+        String newEventID = this.dbReferenceEvents.push().getKey();
+        event.setDbID(newEventID);
+        dbReferenceEvents.child(newEventID).setValue(event);
     }
 
-    public void setJoinedEventsIDs(List<String> joinedEventsIDs) {
-        this.joinedEventsIDs = joinedEventsIDs;
+    /**
+     * Updates event in the db with new data.
+     * @param newEvent - new data to be updated
+     * @param eventID - id of the event to be updated
+     */
+    public void updateEvent(Event newEvent, String eventID) {
+        dbReferenceEvents.child(eventID).setValue(newEvent);
+    }
+
+    /**
+     * Deletes the event from the db. Deletes the reference of this event from the users that have
+     * joined it. Deletes the reference of this event from the creator.
+     * @param event - event to be deleted
+     */
+    public void deleteEvent(Event event) {
+        String eventID = event.getDbID();
+
+        // get the most updated info for this event from the db
+        dbReferenceEvents.child(eventID).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                Event event = task.getResult().getValue(Event.class);
+
+                HashMap<String, String> attendees = event.getAttendees();
+                if (attendees != null) {
+                    for (String userID : attendees.values()) {
+                        dbReferenceUsers.child(userID).child("joinedEvents").child(eventID).setValue(null);
+                    }
+                }
+
+                dbReferenceEvents.child(eventID).setValue(null);
+
+                user.removeCreatedEvent(eventID);
+                dbReferenceUsers.child(userID).setValue(user);
+            }
+        });
     }
 }
