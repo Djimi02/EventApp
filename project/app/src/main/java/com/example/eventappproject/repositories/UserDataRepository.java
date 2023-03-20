@@ -207,6 +207,8 @@ public class UserDataRepository {
      * @param eventID - id of the event to be updated
      */
     public void updateEvent(Event newEvent, String eventID) {
+        newEvent.setCreator(userID);
+        newEvent.setDbID(eventID);
         dbReferenceEvents.child(eventID).setValue(newEvent);
     }
 
@@ -224,6 +226,7 @@ public class UserDataRepository {
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 Event event = task.getResult().getValue(Event.class);
 
+                // Remove this event reference from all attendees' joined events lists
                 HashMap<String, String> attendees = event.getAttendees();
                 if (attendees != null) {
                     for (String userID : attendees.values()) {
@@ -231,8 +234,10 @@ public class UserDataRepository {
                     }
                 }
 
+                // Delete the event from db
                 dbReferenceEvents.child(eventID).setValue(null);
 
+                // Delete the event from this user's created events list
                 user.removeCreatedEvent(eventID);
                 dbReferenceUsers.child(userID).setValue(user);
             }
