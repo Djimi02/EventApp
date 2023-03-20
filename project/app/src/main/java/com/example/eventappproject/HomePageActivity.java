@@ -425,7 +425,54 @@ public class HomePageActivity extends AppCompatActivity implements UserDataListe
      */
     @Override
     public void onJoinedEventItemClick(int position) {
+        Event selectedEvent = this.loggedUserCreatedEvents.get(position);
 
+        dialogBuilder = new AlertDialog.Builder(this);
+        final View popupView = getLayoutInflater().inflate(R.layout.create_event_dialog, null);
+
+        // init views
+        this.createEventDialogTitle = popupView.findViewById(R.id.createEventDialogTitle);
+        this.eventNameCreateEDialog = popupView.findViewById(R.id.createEventDialogEventName);
+        this.eventDescCreateEDialog = popupView.findViewById(R.id.createEventDialogEventDesc);
+        this.eventLocCreateEDialog = popupView.findViewById(R.id.createEventDialogEventLoc);
+        this.eventDateCreateEDialog = popupView.findViewById(R.id.createEventDialogEventDate);
+        this.eventTimeCreateEDialog = popupView.findViewById(R.id.createEventDialogEventTime);
+        this.eventCapacityCreateEDialog = popupView.findViewById(R.id.createEventDialogEventCapacity);
+        this.createEventBTNCreateEDialog = popupView.findViewById(R.id.createEventDialogCreateEventBTN);
+        this.deleteEventBTNCreateEDialog = popupView.findViewById(R.id.createEventDialogDeleteEventBTN);
+
+        createEventDialogTitle.setText(selectedEvent.getName()); // set title to the dialog
+
+        createEventBTNCreateEDialog.setVisibility(View.GONE);
+
+        eventNameCreateEDialog.setVisibility(View.GONE);
+
+        deleteEventBTNCreateEDialog.setText("Leave event");
+
+        // Make edit text views read-only
+        eventNameCreateEDialog.setFocusable(false);
+        eventDescCreateEDialog.setFocusable(false);
+        eventCapacityCreateEDialog.setFocusable(false);
+
+        // Set existing event data to the fields in the dialog
+        eventNameCreateEDialog.setText(selectedEvent.getName());
+        eventDescCreateEDialog.setText(selectedEvent.getDescription());
+        eventLocCreateEDialog.setText(selectedEvent.getLocation());
+        eventDateCreateEDialog.setText(selectedEvent.getDate());
+        eventTimeCreateEDialog.setText(selectedEvent.getTime());
+        eventCapacityCreateEDialog.setText(Integer.toString(selectedEvent.getCapacity()));
+
+        deleteEventBTNCreateEDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO leave event implementation
+            }
+        });
+
+        // show dialog
+        dialogBuilder.setView(popupView);
+        dialog = dialogBuilder.create();
+        dialog.show();
     }
 
     /**
