@@ -1,6 +1,7 @@
 package com.example.eventappproject;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -43,6 +44,10 @@ public class HomePageActivity extends AppCompatActivity implements UserDataListe
 
     /* Database */
     private UserDataRepository userDataRepository;
+
+    /* Dialog */
+    private AlertDialog.Builder dialogBuilder;
+    private AlertDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,7 +125,15 @@ public class HomePageActivity extends AppCompatActivity implements UserDataListe
      * this event to the db.
      */
     private void openCreateEventDialog() {
+        dialogBuilder = new AlertDialog.Builder(this);
+        final View popupView = getLayoutInflater().inflate(R.layout.create_event_dialog, null);
 
+
+
+        // show dialog
+        dialogBuilder.setView(popupView);
+        dialog = dialogBuilder.create();
+        dialog.show();
     }
 
     /**

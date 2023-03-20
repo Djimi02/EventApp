@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="visible">
+
+    <TextView
+        android:id="@+id/createEventDialogTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="32dp"
+        android:text="TextView"
+        android:textSize="34sp"
+        app:layout_constraintBottom_toTopOf="@+id/createEventDialogEventName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/createEventDialogEventName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:ems="10"
+        android:hint="Event name"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="@+id/createEventDialogTitle"
+        app:layout_constraintStart_toStartOf="@+id/createEventDialogTitle"
+        app:layout_constraintTop_toBottomOf="@+id/createEventDialogTitle" />
+
+    <EditText
+        android:id="@+id/createEventDialogEventDesc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:ems="10"
+        android:gravity="start|top"
+        android:hint="Event description"
+        android:inputType="textMultiLine"
+        app:layout_constraintEnd_toEndOf="@+id/createEventDialogEventName"
+        app:layout_constraintStart_toStartOf="@+id/createEventDialogEventName"
+        app:layout_constraintTop_toBottomOf="@+id/createEventDialogEventName" />
+
+    <TextView
+        android:id="@+id/createEventDialogEventLoc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Event Location"
+        app:layout_constraintEnd_toEndOf="@+id/createEventDialogEventDesc"
+        app:layout_constraintStart_toStartOf="@+id/createEventDialogEventDesc"
+        app:layout_constraintTop_toBottomOf="@+id/createEventDialogEventDesc" />
+
+    <TextView
+        android:id="@+id/createEventDialogEventDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Date"
+        app:layout_constraintStart_toStartOf="@+id/createEventDialogEventDesc"
+        app:layout_constraintTop_toBottomOf="@+id/createEventDialogEventLoc" />
+
+    <TextView
+        android:id="@+id/createEventDialogEventTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Time"
+        app:layout_constraintEnd_toEndOf="@+id/createEventDialogEventDesc"
+        app:layout_constraintTop_toBottomOf="@+id/createEventDialogEventLoc" />
+
+    <EditText
+        android:id="@+id/createEventDialogEventCapacity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:ems="10"
+        android:hint="Capacity"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="@+id/createEventDialogEventTime"
+        app:layout_constraintStart_toStartOf="@+id/createEventDialogEventDate"
+        app:layout_constraintTop_toBottomOf="@+id/createEventDialogEventDate" />
+
+    <Button
+        android:id="@+id/createEventDialogCreateEventBTN"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:backgroundTint="#26A603"
+        android:text="Create event"
+        app:layout_constraintEnd_toEndOf="@+id/createEventDialogEventCapacity"
+        app:layout_constraintStart_toStartOf="@+id/createEventDialogEventCapacity"
+        app:layout_constraintTop_toBottomOf="@+id/createEventDialogEventCapacity" />
+
+    <Button
+        android:id="@+id/createEventDialogLeaveEventBTN"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="24dp"
+        android:backgroundTint="#AE1C1C"
+        android:text="Delete event"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/createEventDialogCreateEventBTN"
+        app:layout_constraintStart_toStartOf="@+id/createEventDialogCreateEventBTN"
+        app:layout_constraintTop_toBottomOf="@+id/createEventDialogCreateEventBTN" />
+</androidx.constraintlayout.widget.ConstraintLayout>

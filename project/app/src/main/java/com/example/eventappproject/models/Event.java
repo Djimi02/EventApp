@@ -13,6 +13,7 @@ public class Event {
     private String time;
     private String creator; // reference in the db to the object
     private HashMap<String, String> attendees; // reference in the db to the objects
+    private int capacity;
 
     public Event() {
     }
@@ -92,6 +93,14 @@ public class Event {
 
     public void setAttendees(HashMap<String, String> attendees) {
         this.attendees = attendees;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
     }
 
     public void addAttendee(String attendeeID) {
