@@ -16,19 +16,17 @@ public class Event {
     private int capacity;
 
     public Event() {
+        this.attendees = new HashMap<>();
     }
 
-    public Event(String dbID, String name, String description, String creator) {
-        this.dbID = dbID;
+    public Event(String name, String description, String location, String date, String time, int capacity) {
         this.name = name;
         this.description = description;
-        this.creator = creator;
-    }
-
-    public Event(String name, String date, String time) {
-        this.name = name;
+        this.location = location;
         this.date = date;
         this.time = time;
+        this.capacity = capacity;
+        this.attendees = new HashMap<>();
     }
 
     public String getDbID() {

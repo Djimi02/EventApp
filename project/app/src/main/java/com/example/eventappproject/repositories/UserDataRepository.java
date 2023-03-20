@@ -73,10 +73,10 @@ public class UserDataRepository {
                         @Override
                         public void onComplete(@NonNull Task<DataSnapshot> task) {
                             createdEvents.add(task.getResult().getValue(Event.class));
+                            notifyForUserCreatedEventsDataChange();
                         }
                     });
                 }
-                notifyForUserCreatedEventsDataChange();
             }
 
             @Override
@@ -98,10 +98,10 @@ public class UserDataRepository {
                         @Override
                         public void onComplete(@NonNull Task<DataSnapshot> task) {
                             joinedEvents.add(task.getResult().getValue(Event.class));
+                            notifyForUserJoinedEventsDataChange();
                         }
                     });
                 }
-                notifyForUserJoinedEventsDataChange();
             }
 
             @Override
@@ -194,7 +194,11 @@ public class UserDataRepository {
     public void addNewEventInDB(Event event) {
         String newEventID = this.dbReferenceEvents.push().getKey();
         event.setDbID(newEventID);
+        event.setCreator(userID); // setting the logged user as creator
         dbReferenceEvents.child(newEventID).setValue(event);
+
+        user.addCreatedEvent(newEventID);
+        dbReferenceUsers.child(userID).setValue(user);
     }
 
     /**

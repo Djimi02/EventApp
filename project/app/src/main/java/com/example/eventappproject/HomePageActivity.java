@@ -6,11 +6,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.eventappproject.adapters.UserCreatedEventAdapter;
@@ -25,6 +31,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class HomePageActivity extends AppCompatActivity implements UserDataListener, UserCreatedEventRecyclerViewInterface, UserJoinedEventRecyclerViewInterface {
@@ -48,6 +55,18 @@ public class HomePageActivity extends AppCompatActivity implements UserDataListe
     /* Dialog */
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
+
+    /* Create/Update event dialog views */
+    private TextView createEventDialogTitle;
+    private EditText eventNameCreateEDialog;
+    private EditText eventDescCreateEDialog;
+    private TextView eventLocCreateEDialog;
+    private TextView eventDateCreateEDialog;
+    private TextView eventTimeCreateEDialog;
+    private EditText eventCapacityCreateEDialog;
+    private Button createEventBTNCreateEDialog;
+    private Button deleteEventBTNCreateEDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,7 +147,117 @@ public class HomePageActivity extends AppCompatActivity implements UserDataListe
         dialogBuilder = new AlertDialog.Builder(this);
         final View popupView = getLayoutInflater().inflate(R.layout.create_event_dialog, null);
 
+        // init views
+        this.createEventDialogTitle = popupView.findViewById(R.id.createEventDialogTitle);
+        this.eventNameCreateEDialog = popupView.findViewById(R.id.createEventDialogEventName);
+        this.eventDescCreateEDialog = popupView.findViewById(R.id.createEventDialogEventDesc);
+        this.eventLocCreateEDialog = popupView.findViewById(R.id.createEventDialogEventLoc);
+        this.eventDateCreateEDialog = popupView.findViewById(R.id.createEventDialogEventDate);
+        this.eventTimeCreateEDialog = popupView.findViewById(R.id.createEventDialogEventTime);
+        this.eventCapacityCreateEDialog = popupView.findViewById(R.id.createEventDialogEventCapacity);
+        this.createEventBTNCreateEDialog = popupView.findViewById(R.id.createEventDialogCreateEventBTN);
+        this.deleteEventBTNCreateEDialog = popupView.findViewById(R.id.createEventDialogDeleteEventBTN);
 
+        createEventDialogTitle.setText("Create Event"); // set title of the dialog
+
+        deleteEventBTNCreateEDialog.setVisibility(View.GONE); // hide delete event btn
+
+        // Configure date picker
+        eventDateCreateEDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // on below line we are getting
+                // the instance of our calendar.
+                final Calendar c = Calendar.getInstance();
+
+                // on below line we are getting
+                // our day, month and year.
+                int year = c.get(Calendar.YEAR);
+                int month = c.get(Calendar.MONTH);
+                int day = c.get(Calendar.DAY_OF_MONTH);
+
+                // on below line we are creating a variable for date picker dialog.
+                DatePickerDialog datePickerDialog = new DatePickerDialog(
+                        // on below line we are passing context.
+                        HomePageActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year,
+                                                  int monthOfYear, int dayOfMonth) {
+                                // on below line we are setting date to our text view.
+                                eventDateCreateEDialog.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+                            }
+                        },
+                        // on below line we are passing year,
+                        // month and day for selected date in our date picker.
+                        year, month, day);
+                // at last we are calling show to
+                // display our date picker dialog.
+                datePickerDialog.show();
+            }
+        });
+
+        // Configure time picker
+        eventTimeCreateEDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // on below line we are getting
+                // the instance of our calendar.
+                final Calendar c = Calendar.getInstance();
+
+                // on below line we are getting
+                // our hour and minute.
+                int hour = c.get(Calendar.HOUR_OF_DAY);
+                int minute = c.get(Calendar.MINUTE);
+
+                // on below line we are creating a variable for time picker dialog.
+                TimePickerDialog timePickerDialog = new TimePickerDialog(
+                        // on below line we are passing context.
+                        HomePageActivity.this,
+                        new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker view, int hourOfDay,
+                                                  int minute) {
+                                // on below line we are setting time to our text view.
+                                eventTimeCreateEDialog.setText(hourOfDay+ ":" +minute);
+
+                            }
+                        },
+                        // on below line we are passing year,
+                        // month and day for selected time in our time picker.
+                        hour, minute, true);
+                // at last we are calling show to
+                // display our time picker dialog.
+                timePickerDialog.show();
+            }
+        });
+
+        // Set create event btn functionality
+        createEventBTNCreateEDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Get data from fields
+                String eventName = eventNameCreateEDialog.getText().toString().trim();
+                String eventDesc = eventDescCreateEDialog.getText().toString().trim();
+                String eventLoc = eventLocCreateEDialog.getText().toString().trim();
+                String eventDate = eventDateCreateEDialog.getText().toString().trim();
+                String eventTime = eventTimeCreateEDialog.getText().toString().trim();
+                String eventCapacitySTR = eventCapacityCreateEDialog.getText().toString().trim();
+                int eventCapacity;
+                try {
+                    eventCapacity = Integer.parseInt(eventCapacitySTR);
+                } catch (Exception e) {
+                    eventCapacity = 0;
+                }
+
+                // Create event and add it to db
+                Event newEvent = new Event(eventName, eventDesc, eventLoc, eventDate, eventTime, eventCapacity);
+                userDataRepository.addNewEventInDB(newEvent);
+                
+                dialog.dismiss();
+                Toast.makeText(HomePageActivity.this, "Event created successfully!", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         // show dialog
         dialogBuilder.setView(popupView);

@@ -12,12 +12,16 @@ public class User {
     private HashMap<String, String> joinedEvents; // reference in the db to the objects
 
     public User() {
+        this.joinedEvents = new HashMap<>();
+        this.createdEvents = new HashMap<>();
     }
 
     public User(String dbID, String email, String name) {
         this.dbID = dbID;
         this.email = email;
         this.name = name;
+        this.joinedEvents = new HashMap<>();
+        this.createdEvents = new HashMap<>();
     }
 
     public String getDbID() {
