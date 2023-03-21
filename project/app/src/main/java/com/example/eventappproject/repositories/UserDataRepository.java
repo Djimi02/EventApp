@@ -243,4 +243,52 @@ public class UserDataRepository {
             }
         });
     }
+
+    /**
+     * Deletes all created events.
+     */
+    public void deleteAllEvents() {
+        for (Event event : this.createdEvents) {
+            deleteEvent(event);
+        }
+    }
+
+    /**
+     * Joins the given event
+     * @param event - event to be joined
+     */
+    public void joinEvent(Event event) {
+        // Update event with new attendee
+        event.addAttendee(this.userID);
+        event.setCapacity(event.getCapacity() - 1); // decrement event capacity
+        dbReferenceEvents.child(event.getDbID()).setValue(event);
+
+        // Update this user with new joined event
+        user.addJoinedEvent(event.getDbID());
+        dbReferenceUsers.child(userID).setValue(user);
+    }
+
+    /**
+     * Leaves given event.
+     * @param event - event to be left
+     */
+    public void leaveEvent(Event event) {
+        // Update event with the removed attendee
+        event.removeAttendee(this.userID);
+        event.setCapacity(event.getCapacity() + 1);
+        dbReferenceEvents.child(event.getDbID()).setValue(event);
+
+        // Update user with removed joined event
+        this.user.removeJoinedEvent(event.getDbID());
+        dbReferenceUsers.child(this.userID).setValue(user);
+    }
+
+    /**
+     * Leaves all joined events.
+     */
+    public void leaveAllEvents() {
+        for (Event event : this.joinedEvents) {
+            leaveEvent(event);
+        }
+    }
 }

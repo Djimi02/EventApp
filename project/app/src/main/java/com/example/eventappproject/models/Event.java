@@ -104,4 +104,8 @@ public class Event {
     public void addAttendee(String attendeeID) {
         this.attendees.put(attendeeID, attendeeID);
     }
+
+    public void removeAttendee(String attendeeID) {
+        this.attendees.remove(attendeeID);
+    }
 }
