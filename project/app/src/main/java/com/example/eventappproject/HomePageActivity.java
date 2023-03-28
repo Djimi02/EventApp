@@ -94,7 +94,7 @@ public class HomePageActivity extends AppCompatActivity implements UserDataListe
 
                 switch (item.getItemId()) {
                     case R.id.mapItemNavBar:
-                        Toast.makeText(HomePageActivity.this, "Map selected!", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(HomePageActivity.this, MapsActivity.class));
                         return true;
                     case R.id.homeItemNavBar:
                         return true;

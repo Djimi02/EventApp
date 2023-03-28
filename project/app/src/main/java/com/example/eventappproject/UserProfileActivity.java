@@ -95,7 +95,7 @@ public class UserProfileActivity extends AppCompatActivity implements UserDataLi
 
                 switch (item.getItemId()) {
                     case R.id.mapItemNavBar:
-                        Toast.makeText(UserProfileActivity.this, "Map selected!", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(UserProfileActivity.this, MapsActivity.class));
                         return true;
                     case R.id.homeItemNavBar:
                         Intent intent = new Intent(UserProfileActivity.this, HomePageActivity.class);
