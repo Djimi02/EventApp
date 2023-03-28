@@ -3,13 +3,17 @@ package com.example.eventappproject;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -25,9 +29,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     /* Views */
     private BottomNavigationView bottomNavigationView;
+    private ImageButton menuButton;
+    private DrawerLayout mDrawerLayout;
+
+    /* Maps */
     private GoogleMap mMap;
     private ActivityMapsBinding binding;
-
     private static int LOCATION_PERMISSION_CODE = 101;
 
     @Override
@@ -73,6 +80,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void initViews() {
         this.bottomNavigationView = findViewById(R.id.homePageNavView);
+        this.menuButton = findViewById(R.id.searchBarMenu);
+        this.mDrawerLayout = findViewById(R.id.mapLayout);
 
         // configure navigation bar
         bottomNavigationView.setSelectedItemId(R.id.mapItemNavBar);
@@ -100,6 +109,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             }
         });
+
+        menuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDrawerLayout.openDrawer(Gravity.LEFT);
+            }
+        });
+
     }
 
     private boolean isLocationPermissionGranted() {
