@@ -60,53 +60,32 @@ public class UserDataRepository {
             }
         });
 
-        // updates created events data
-        dbReferenceUsers.child(userID).child("createdEvents").addValueEventListener(new ValueEventListener() {
+        dbReferenceEvents.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                createdEvents.clear();
-                for (DataSnapshot ds : snapshot.getChildren()) {
-                    String eventID = ds.getKey();
-
-                    // find and retrieves the event as object
-                    dbReferenceEvents.child(eventID).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DataSnapshot> task) {
-                            createdEvents.add(task.getResult().getValue(Event.class));
-                            notifyForUserCreatedEventsDataChange();
+                dbReferenceUsers.child(userID).child("createdEvents").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                        if (!task.isSuccessful()) {
+                            return;
                         }
-                    });
-                }
+                        retrieveCreatedEvents(task.getResult());
+                    }
+                });
+
+                dbReferenceUsers.child(userID).child("joinedEvents").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                        if (!task.isSuccessful()) {
+                            return;
+                        }
+                        retrieveJoinedEvents(task.getResult());
+                    }
+                });
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-        // updates joined events data
-        dbReferenceUsers.child(userID).child("joinedEvents").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                joinedEvents.clear();
-                for (DataSnapshot ds : snapshot.getChildren()) {
-                    String eventID = ds.getKey();
-
-                    // find and retrieves the event as object
-                    dbReferenceEvents.child(eventID).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DataSnapshot> task) {
-                            joinedEvents.add(task.getResult().getValue(Event.class));
-                            notifyForUserJoinedEventsDataChange();
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
     }
@@ -185,6 +164,63 @@ public class UserDataRepository {
 
     public void setJoinedEvents(List<Event> joinedEvents) {
         this.joinedEvents = joinedEvents;
+    }
+
+    /**
+     * Given DataSnapshot obj of the created events of the logged user, the method retrieves the
+     * events as objects and fills them in this.loggedUserCreatedEvents.
+     * @param snapshot - data to retrieve from
+     * @pre snapshot should be from Users.child(loggedUserID).child("eventsCreated")
+     */
+    private void retrieveCreatedEvents(DataSnapshot snapshot) {
+        System.out.println("CREATED EVENTS DATA CHANGED");
+        createdEvents.clear();
+        boolean dataFound = false;
+        for(DataSnapshot ds : snapshot.getChildren()) {
+            dataFound = true;
+
+            String eventID = ds.getValue(String.class);
+            dbReferenceEvents.child(eventID).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                    createdEvents.add(task.getResult().getValue(Event.class));
+                    notifyForUserCreatedEventsDataChange();
+                }
+            });
+        }
+
+        if (!dataFound) {
+            notifyForUserCreatedEventsDataChange();
+        }
+    }
+
+    /**
+     * Given DataSnapshot obj of the joined events of the logged user, the method retrieves the
+     * events as objects and fills them in this.loggedUserJoinedEvents.
+     * @param snapshot - data to retrieve from
+     * @pre snapshot should be from Users.child(loggedUserID).child("eventsJoined")
+     */
+    private void retrieveJoinedEvents(DataSnapshot snapshot) {
+        System.out.println("JOINED EVENTS DATA CHANGED");
+        joinedEvents.clear();
+        boolean dataFound = false;
+        for(DataSnapshot ds : snapshot.getChildren()) {
+            dataFound = true;
+
+            String eventID = ds.getValue(String.class);
+
+            dbReferenceEvents.child(eventID).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                    joinedEvents.add(task.getResult().getValue(Event.class));
+                    notifyForUserJoinedEventsDataChange();
+                }
+            });
+        }
+
+        if (!dataFound) {
+            notifyForUserJoinedEventsDataChange();
+        }
     }
 
     /**
