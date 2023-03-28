@@ -104,7 +104,6 @@ public class UserProfileActivity extends AppCompatActivity implements UserDataLi
                         overridePendingTransition(0, 0);
                         return true;
                     case R.id.profileItemNavBar:
-
                         return true;
                     default:
                         return false;
