@@ -1,5 +1,9 @@
 package com.example.eventappproject;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,6 +31,7 @@ import com.example.eventappproject.interfaces.UserJoinedEventRecyclerViewInterfa
 import com.example.eventappproject.models.Event;
 import com.example.eventappproject.models.User;
 import com.example.eventappproject.repositories.UserDataRepository;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
@@ -66,6 +71,9 @@ public class HomePageActivity extends AppCompatActivity implements UserDataListe
     private EditText eventCapacityCreateEDialog;
     private Button createEventBTNCreateEDialog;
     private Button deleteEventBTNCreateEDialog;
+
+    /* Helpers */
+    ActivityResultLauncher<Intent> activityResultLauncher;
 
 
     @Override
@@ -123,6 +131,25 @@ public class HomePageActivity extends AppCompatActivity implements UserDataListe
 
     /* This method is responsible for the initialization of all variables. */
     private void initVars() {
+        // Gets the location from the maps and sets it on the correct field
+        this.activityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() != 1) {
+                            return;
+                        }
+
+                        if (result.getData() == null) {
+                            return;
+                        }
+
+                        LatLng location = (LatLng) result.getData().getExtras().get("location");
+                        eventLocCreateEDialog.setText(location.toString());
+                    }
+                });
+
         this.userDataRepository = UserDataRepository.getInstance();
         userDataRepository.addListener(this);
 
@@ -162,9 +189,7 @@ public class HomePageActivity extends AppCompatActivity implements UserDataListe
         eventLocCreateEDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent int1 = new Intent(HomePageActivity.this, MapsActivity.class);
-                int1.putExtra("getLocation", "true");
-                startActivity(int1);
+                getLocationFromMap();;
             }
         });
 
@@ -184,6 +209,10 @@ public class HomePageActivity extends AppCompatActivity implements UserDataListe
                     eventCapacity = Integer.parseInt(eventCapacitySTR);
                 } catch (Exception e) {
                     eventCapacity = 0;
+                }
+
+                if (!dialogDataCheck(eventName, eventLoc, eventDate, eventTime)) {
+                    return;
                 }
 
                 // Create event and add it to db
@@ -227,6 +256,13 @@ public class HomePageActivity extends AppCompatActivity implements UserDataListe
 
         configureDateAndTime();
 
+        eventLocCreateEDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getLocationFromMap();
+            }
+        });
+
         // Set the functionality of the update event btn
         createEventBTNCreateEDialog.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -242,7 +278,11 @@ public class HomePageActivity extends AppCompatActivity implements UserDataListe
                 try {
                     eventCapacity = Integer.parseInt(eventCapacitySTR);
                 } catch (Exception e) {
-                    eventCapacity = 0;
+                    eventCapacity = 10;
+                }
+
+                if (!dialogDataCheck(eventName, eventLoc, eventDate, eventTime)) {
+                    return;
                 }
 
                 // Update event and add it to db
@@ -274,6 +314,31 @@ public class HomePageActivity extends AppCompatActivity implements UserDataListe
         dialogBuilder.setView(popupView);
         dialog = dialogBuilder.create();
         dialog.show();
+    }
+
+    private boolean dialogDataCheck(String eventName, String eventLoc, String eventDate, String eventTime) {
+        boolean dataCheck = true;
+        if (eventName.isEmpty()) {
+            eventNameCreateEDialog.setError("Choose a name!");
+            dataCheck = false;
+        }
+        if (eventLoc.isEmpty() || eventLoc.equals("Event Location")) {
+            eventLocCreateEDialog.setError("Tap to choose a location!");
+            dataCheck = false;
+        }
+        if (eventDate.isEmpty() || eventDate.equals("Date")) {
+            eventDateCreateEDialog.setError("Tap to choose a date!");
+            dataCheck = false;
+        }
+        if (eventTime.isEmpty() || eventTime.equals("Time")) {
+            eventTimeCreateEDialog.setError("Tap to choose time!");
+            dataCheck = false;
+        }
+
+        if (!dataCheck) {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -426,6 +491,12 @@ public class HomePageActivity extends AppCompatActivity implements UserDataListe
                 timePickerDialog.show();
             }
         });
+    }
+
+    private void getLocationFromMap() {
+        Intent int1 = new Intent(HomePageActivity.this, MapsActivity.class);
+        int1.putExtra("getLocation", "true");
+        activityResultLauncher.launch(int1);
     }
 
     /**
