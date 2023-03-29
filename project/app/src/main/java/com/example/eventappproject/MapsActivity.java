@@ -16,6 +16,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
+import com.example.eventappproject.fragments.AllEventsFragment;
+import com.example.eventappproject.fragments.PickLocationFragment;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -30,7 +32,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends FragmentActivity {
 
     /* Views */
     private BottomNavigationView bottomNavigationView;
@@ -38,11 +40,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private DrawerLayout mDrawerLayout;
 
     /* Maps */
-    private GoogleMap mMap;
     private ActivityMapsBinding binding;
     private static int LOCATION_PERMISSION_CODE = 101;
-
-    private FusedLocationProviderClient fusedLocationProviderClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,44 +53,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
 
         // Ask for location permission
-        System.out.println("LOCATION PERMISION " + isLocationPermissionGranted());
         if (!isLocationPermissionGranted()) {
-            System.out.println("I AM HERE");
             requestLocationPermission();
         }
 
-        // Construct a FusedLocationProviderClient.
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        if (getIntent().getExtras().get("getLocation").equals("true")){
+            PickLocationFragment fragment = new PickLocationFragment(this);
+            mapFragment.getMapAsync(fragment);
+            return;
+        } else {
+            System.out.println(" I AM HERE 11 1");
+            AllEventsFragment fragment = new AllEventsFragment(this);
+            mapFragment.getMapAsync(fragment);
+        }
 
         initViews();
-    }
-
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-
-        // Turn on the My Location layer and the related control on the map.
-        updateLocationUI();
-
-        // Get the current location of the device and set the position of the map.
-        getDeviceLocation();
-
-        // Add a marker in Sydney and move the camera
-//        LatLng sydney = new LatLng(-34, 151);
-//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 
     private void initViews() {
@@ -113,12 +91,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                         startActivity(intent);
                         overridePendingTransition(0, 0);
+                        finish();
                         return true;
                     case R.id.profileItemNavBar:
                         Intent intent1 = new Intent(MapsActivity.this, UserProfileActivity.class);
                         intent1.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                         startActivity(intent1);
                         overridePendingTransition(0, 0);
+                        finish();
                         return true;
                     default:
                         return false;
@@ -133,51 +113,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
-    }
-
-    private void updateLocationUI() {
-        if (mMap == null) {
-            return;
-        }
-        try {
-            if (isLocationPermissionGranted()) {
-                mMap.setMyLocationEnabled(true);
-                mMap.getUiSettings().setMyLocationButtonEnabled(true);
-            } else {
-                mMap.setMyLocationEnabled(false);
-                mMap.getUiSettings().setMyLocationButtonEnabled(false);
-                requestLocationPermission();
-            }
-        } catch (SecurityException e)  {
-        }
-    }
-
-    private void getDeviceLocation() {
-        /*
-         * Get the best and most recent location of the device, which may be null in rare
-         * cases when a location is not available.
-         */
-        try {
-            if (isLocationPermissionGranted()) {
-                Task<Location> locationResult = fusedLocationProviderClient.getLastLocation();
-                locationResult.addOnCompleteListener(this, new OnCompleteListener<Location>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Location> task) {
-                        if (task.isSuccessful()) {
-                            // Set the map's camera position to the current location of the device.
-                            Location lastKnownLocation = task.getResult();
-                            if (lastKnownLocation != null) {
-                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                                        new LatLng(lastKnownLocation.getLatitude(),
-                                                lastKnownLocation.getLongitude()), 15f));
-                            }
-                        } else {
-                        }
-                    }
-                });
-            }
-        } catch (SecurityException e)  {
-        }
     }
 
     private boolean isLocationPermissionGranted() {

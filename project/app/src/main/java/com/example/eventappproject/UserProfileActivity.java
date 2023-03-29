@@ -95,7 +95,9 @@ public class UserProfileActivity extends AppCompatActivity implements UserDataLi
 
                 switch (item.getItemId()) {
                     case R.id.mapItemNavBar:
-                        startActivity(new Intent(UserProfileActivity.this, MapsActivity.class));
+                        Intent int1 = new Intent(UserProfileActivity.this, MapsActivity.class);
+                        int1.putExtra("getLocation", "false");
+                        startActivity(int1);
                         return true;
                     case R.id.homeItemNavBar:
                         Intent intent = new Intent(UserProfileActivity.this, HomePageActivity.class);

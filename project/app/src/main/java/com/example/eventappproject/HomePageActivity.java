@@ -94,7 +94,9 @@ public class HomePageActivity extends AppCompatActivity implements UserDataListe
 
                 switch (item.getItemId()) {
                     case R.id.mapItemNavBar:
-                        startActivity(new Intent(HomePageActivity.this, MapsActivity.class));
+                        Intent int1 = new Intent(HomePageActivity.this, MapsActivity.class);
+                        int1.putExtra("getLocation", "false");
+                        startActivity(int1);
                         return true;
                     case R.id.homeItemNavBar:
                         return true;
@@ -155,6 +157,16 @@ public class HomePageActivity extends AppCompatActivity implements UserDataListe
         deleteEventBTNCreateEDialog.setVisibility(View.GONE); // hide delete event btn
 
         configureDateAndTime();
+
+        // Pick location
+        eventLocCreateEDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent int1 = new Intent(HomePageActivity.this, MapsActivity.class);
+                int1.putExtra("getLocation", "true");
+                startActivity(int1);
+            }
+        });
 
         // Set create event btn functionality
         createEventBTNCreateEDialog.setOnClickListener(new View.OnClickListener() {
