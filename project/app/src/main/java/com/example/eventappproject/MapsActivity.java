@@ -1,6 +1,7 @@
 package com.example.eventappproject;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -38,6 +39,7 @@ public class MapsActivity extends FragmentActivity {
     private BottomNavigationView bottomNavigationView;
     private ImageButton menuButton;
     private DrawerLayout mDrawerLayout;
+    private CardView searchBar;
 
     /* Maps */
     private ActivityMapsBinding binding;
@@ -59,23 +61,26 @@ public class MapsActivity extends FragmentActivity {
             requestLocationPermission();
         }
 
+        initViews();
+
         if (getIntent().getExtras().get("getLocation").equals("true")){
+            bottomNavigationView.setVisibility(View.GONE);
+            searchBar.setVisibility(View.GONE);
             PickLocationFragment fragment = new PickLocationFragment(this);
             mapFragment.getMapAsync(fragment);
             return;
         } else {
-            System.out.println(" I AM HERE 11 1");
             AllEventsFragment fragment = new AllEventsFragment(this);
             mapFragment.getMapAsync(fragment);
         }
 
-        initViews();
     }
 
     private void initViews() {
         this.bottomNavigationView = findViewById(R.id.homePageNavView);
         this.menuButton = findViewById(R.id.searchBarMenu);
         this.mDrawerLayout = findViewById(R.id.mapLayout);
+        this.searchBar = findViewById(R.id.searchBarCardView);
 
         // configure navigation bar
         bottomNavigationView.setSelectedItemId(R.id.mapItemNavBar);
