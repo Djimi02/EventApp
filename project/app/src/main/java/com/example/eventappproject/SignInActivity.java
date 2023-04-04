@@ -18,6 +18,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class SignInActivity extends AppCompatActivity {
 
@@ -36,6 +37,18 @@ public class SignInActivity extends AppCompatActivity {
 
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
+
+        checkIfLogged();
+    }
+
+    private void checkIfLogged() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            return;
+        }
+        Toast.makeText(SignInActivity.this, "Login was successful!", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(SignInActivity.this, HomePageActivity.class));
+        finish();
     }
 
     private void initViews() {

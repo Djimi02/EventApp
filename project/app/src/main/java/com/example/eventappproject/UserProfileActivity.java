@@ -118,6 +118,7 @@ public class UserProfileActivity extends AppCompatActivity implements UserDataLi
             @Override
             public void onClick(View v) {
                 goToLoginPage();
+
             }
         });
 
@@ -152,6 +153,7 @@ public class UserProfileActivity extends AppCompatActivity implements UserDataLi
         startActivity(intent);
         finish();
         UserDataRepository.deleteCurrentInstance(); // deletes the data for the user
+        FirebaseAuth.getInstance().signOut();
     }
 
     private void showSnackBar() {
