@@ -16,9 +16,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -71,6 +74,7 @@ public class HomePageActivity extends AppCompatActivity implements UserDataListe
     private EditText eventCapacityCreateEDialog;
     private Button createEventBTNCreateEDialog;
     private Button deleteEventBTNCreateEDialog;
+    private Spinner categorySpinner;
 
     /* Helpers */
     ActivityResultLauncher<Intent> activityResultLauncher;
@@ -146,7 +150,7 @@ public class HomePageActivity extends AppCompatActivity implements UserDataListe
                         }
 
                         LatLng location = (LatLng) result.getData().getExtras().get("location");
-                        eventLocCreateEDialog.setText(location.toString());
+                        eventLocCreateEDialog.setText(location.latitude+ "," + location.longitude);
                     }
                 });
 
@@ -203,6 +207,7 @@ public class HomePageActivity extends AppCompatActivity implements UserDataListe
                 String eventLoc = eventLocCreateEDialog.getText().toString().trim();
                 String eventDate = eventDateCreateEDialog.getText().toString().trim();
                 String eventTime = eventTimeCreateEDialog.getText().toString().trim();
+                String eventCategory = categorySpinner.getSelectedItem().toString();
                 String eventCapacitySTR = eventCapacityCreateEDialog.getText().toString().trim();
                 int eventCapacity;
                 try {
@@ -216,7 +221,7 @@ public class HomePageActivity extends AppCompatActivity implements UserDataListe
                 }
 
                 // Create event and add it to db
-                Event newEvent = new Event(eventName, eventDesc, eventLoc, eventDate, eventTime, eventCapacity);
+                Event newEvent = new Event(eventName, eventDesc, eventLoc, eventDate, eventTime, eventCapacity, eventCategory);
                 userDataRepository.addNewEventInDB(newEvent);
                 
                 dialog.dismiss();
@@ -410,6 +415,25 @@ public class HomePageActivity extends AppCompatActivity implements UserDataListe
         this.eventCapacityCreateEDialog = popupView.findViewById(R.id.createEventDialogEventCapacity);
         this.createEventBTNCreateEDialog = popupView.findViewById(R.id.createEventDialogCreateEventBTN);
         this.deleteEventBTNCreateEDialog = popupView.findViewById(R.id.createEventDialogDeleteEventBTN);
+        this.categorySpinner = popupView.findViewById(R.id.spinner);
+
+        String[] categories = new String[] {"Party", "Sport", "Culture", "Food", "Drinks", "Other"};
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(HomePageActivity.this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, categories);
+        arrayAdapter.setDropDownViewResource(androidx.appcompat.R.layout.support_simple_spinner_dropdown_item);
+        categorySpinner.setAdapter(arrayAdapter);
+        categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String value = parent.getItemAtPosition(position).toString();
+
+                categorySpinner.setSelection(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     private void setDataToDialogViews(Event selectedEvent) {

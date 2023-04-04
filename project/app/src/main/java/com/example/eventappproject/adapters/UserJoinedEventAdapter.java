@@ -44,29 +44,6 @@ public class UserJoinedEventAdapter extends RecyclerView.Adapter<UserJoinedEvent
         Event event = events.get(position);
         holder.eventName.setText(event.getName());
         holder.eventDate.setText(event.getDate() + " " + event.getTime());
-
-//        switch (event.getCategory()) {
-//            case "Party":
-//                holder.icon.setImageResource(R.drawable.logo_category_party);
-//                break;
-//            case "Sport":
-//                holder.icon.setImageResource(R.drawable.logo_category_sport);
-//                break;
-//            case "Culture":
-//                holder.icon.setImageResource(R.drawable.logo_category_culture);
-//                break;
-//            case "Food":
-//                holder.icon.setImageResource(R.drawable.logo_category_food);
-//                break;
-//            case "Drinks":
-//                holder.icon.setImageResource(R.drawable.logo_category_drinks);
-//                break;
-//            case "Other":
-//                holder.icon.setImageResource(R.drawable.logo_category_other);
-//                break;
-//            default:
-//                holder.icon.setImageResource(R.drawable.baseline_question_mark_24);
-//        }
     }
 
     @Override
@@ -97,5 +74,13 @@ public class UserJoinedEventAdapter extends RecyclerView.Adapter<UserJoinedEvent
                 }
             });
         }
+    }
+
+    public List<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(List<Event> events) {
+        this.events = events;
     }
 }

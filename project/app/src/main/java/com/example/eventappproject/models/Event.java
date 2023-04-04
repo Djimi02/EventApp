@@ -13,13 +13,14 @@ public class Event {
     private String time;
     private String creator; // reference in the db to the object
     private HashMap<String, String> attendees; // reference in the db to the objects
+    private String category;
     private int capacity;
 
     public Event() {
         this.attendees = new HashMap<>();
     }
 
-    public Event(String name, String description, String location, String date, String time, int capacity) {
+    public Event(String name, String description, String location, String date, String time, int capacity, String category) {
         this.name = name;
         this.description = description;
         this.location = location;
@@ -27,6 +28,7 @@ public class Event {
         this.time = time;
         this.capacity = capacity;
         this.attendees = new HashMap<>();
+        this.category = category;
     }
 
     public String getDbID() {
@@ -99,6 +101,14 @@ public class Event {
 
     public void setCapacity(int capacity) {
         this.capacity = capacity;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public void addAttendee(String attendeeID) {
