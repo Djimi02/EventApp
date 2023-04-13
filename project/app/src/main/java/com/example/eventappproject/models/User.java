@@ -7,7 +7,6 @@ public class User {
     private String dbID; // reference in the db to this object
     private String email;
     private String name;
-    private String description;
     private HashMap<String, String> createdEvents; // reference in the db to the objects
     private HashMap<String, String> joinedEvents; // reference in the db to the objects
 
@@ -48,13 +47,7 @@ public class User {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
-    }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
 
     public HashMap<String, String> getCreatedEvents() {
         return createdEvents;
