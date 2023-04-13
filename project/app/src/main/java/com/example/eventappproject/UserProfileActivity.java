@@ -220,11 +220,14 @@ public class UserProfileActivity extends AppCompatActivity implements UserDataLi
 
                         userDataRepository.deleteAllEvents(); // deletes all created events
 
-                        userDataRepository.deleteAllEvents(); // leaves all joined events
+                        userDataRepository.leaveAllEvents(); // leaves all joined events
 
-                        fUser.delete(); // deletes authentication details about the user
-
-                        dbReferenceUsers.child(user.getDbID()).setValue(null); // deletes user object in db
+                        fUser.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                dbReferenceUsers.child(user.getDbID()).setValue(null); // deletes user object in db
+                            }
+                        }); // deletes authentication details about the user
 
                         dialog.dismiss();
                         goToLoginPage();
