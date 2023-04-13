@@ -64,7 +64,7 @@ public class HomePageActivity extends AppCompatActivity implements UserDataListe
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
 
-    /* Create/Update event dialog views */
+    /* Event dialog views */
     private TextView createEventDialogTitle;
     private EditText eventNameCreateEDialog;
     private EditText eventDescCreateEDialog;
@@ -354,7 +354,7 @@ public class HomePageActivity extends AppCompatActivity implements UserDataListe
      */
     @Override
     public void onJoinedEventItemClick(int position) {
-        Event selectedEvent = this.loggedUserCreatedEvents.get(position);
+        Event selectedEvent = this.loggedUserJoinedEvents.get(position);
 
         dialogBuilder = new AlertDialog.Builder(this);
         final View popupView = getLayoutInflater().inflate(R.layout.create_event_dialog, null);
@@ -377,6 +377,7 @@ public class HomePageActivity extends AppCompatActivity implements UserDataListe
 
         // Set existing event data to the fields in the dialog
         setDataToDialogViews(selectedEvent);
+        categorySpinner.setEnabled(false);
 
         // Acts as Leave event btn
         deleteEventBTNCreateEDialog.setOnClickListener(new View.OnClickListener() {
@@ -385,6 +386,8 @@ public class HomePageActivity extends AppCompatActivity implements UserDataListe
                 userDataRepository.leaveEvent(selectedEvent);
 
                 Toast.makeText(HomePageActivity.this, "Event left successful!", Toast.LENGTH_SHORT).show();
+
+                dialog.dismiss();
             }
         });
 
@@ -443,6 +446,28 @@ public class HomePageActivity extends AppCompatActivity implements UserDataListe
         eventDateCreateEDialog.setText(selectedEvent.getDate());
         eventTimeCreateEDialog.setText(selectedEvent.getTime());
         eventCapacityCreateEDialog.setText(Integer.toString(selectedEvent.getCapacity()));
+        int index = 0;
+        switch (selectedEvent.getCategory()) {
+            case "Party":
+                index = 0;
+                break;
+            case "Sport":
+                index = 1;
+                break;
+            case "Culture":
+                index = 2;
+                break;
+            case "Food":
+                index = 3;
+                break;
+            case "Drinks":
+                index = 4;
+                break;
+            case "Other":
+                index = 5;
+                break;
+        }
+        categorySpinner.setSelection(index);
     }
 
     private void configureDateAndTime() {

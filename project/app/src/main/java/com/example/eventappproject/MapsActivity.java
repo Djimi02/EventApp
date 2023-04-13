@@ -71,6 +71,7 @@ public class MapsActivity extends FragmentActivity {
             return;
         } else {
             AllEventsFragment fragment = new AllEventsFragment(this);
+            getSupportFragmentManager().beginTransaction().add(fragment, fragment.getTag()).commit();
             mapFragment.getMapAsync(fragment);
         }
 

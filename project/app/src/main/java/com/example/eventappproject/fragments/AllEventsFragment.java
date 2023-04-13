@@ -3,39 +3,34 @@ package com.example.eventappproject.fragments;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import com.example.eventappproject.HomePageActivity;
-import com.example.eventappproject.MapsActivity;
 import com.example.eventappproject.R;
-import com.example.eventappproject.UserProfileActivity;
 import com.example.eventappproject.adapters.UserJoinedEventAdapter;
 import com.example.eventappproject.interfaces.UserJoinedEventRecyclerViewInterface;
 import com.example.eventappproject.models.Event;
+import com.example.eventappproject.repositories.UserDataRepository;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -47,7 +42,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
@@ -79,13 +73,30 @@ public class AllEventsFragment extends SupportMapFragment implements OnMapReadyC
     /* Attributes */
     Context parent;
     List<Event> allEvents;
-    Map<Event, Marker> eventMarkerMap;
+    Map<Marker, Event> eventMarkerMap;
 
     /* Helpers */
     UserJoinedEventAdapter allEventsAdapter;
 
     /* Database */
     DatabaseReference events;
+    UserDataRepository userDataRepository;
+
+    /* Dialog */
+    private AlertDialog.Builder dialogBuilder;
+    private AlertDialog dialog;
+
+    /* Event dialog views */
+    private TextView createEventDialogTitle;
+    private EditText eventNameCreateEDialog;
+    private EditText eventDescCreateEDialog;
+    private TextView eventLocCreateEDialog;
+    private TextView eventDateCreateEDialog;
+    private TextView eventTimeCreateEDialog;
+    private EditText eventCapacityCreateEDialog;
+    private Button joinEventBTN;
+    private Button deleteEventBTN;
+    private Spinner categorySpinner;
 
     /* Maps */
     GoogleMap mMap;
@@ -97,9 +108,7 @@ public class AllEventsFragment extends SupportMapFragment implements OnMapReadyC
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(parent);
 
-        allEvents = new ArrayList<>();
-        eventMarkerMap = new HashMap<>();
-        allEventsAdapter = new UserJoinedEventAdapter(allEvents, this);
+        initVars();
 
         events = FirebaseDatabase.getInstance("https://eventapp-18029-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Events");
         initViews();
@@ -108,6 +117,17 @@ public class AllEventsFragment extends SupportMapFragment implements OnMapReadyC
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(@NonNull Marker marker) {
+
+                if (eventMarkerMap.get(marker) != null) {
+                    viewEvent(eventMarkerMap.get(marker));
+                }
+
+                return false;
+            }
+        });
 
         // Turn on the My Location layer and the related control on the map.
         updateLocationUI();
@@ -143,6 +163,13 @@ public class AllEventsFragment extends SupportMapFragment implements OnMapReadyC
 //        LatLng sydney = new LatLng(-34, 151);
 //        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
 //        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+    }
+
+    private void initVars() {
+        this.allEvents = new ArrayList<>();
+        this.eventMarkerMap = new HashMap<>();
+        this.allEventsAdapter = new UserJoinedEventAdapter(allEvents, this);
+        this.userDataRepository = UserDataRepository.getInstance();
     }
 
     private void initViews() {
@@ -268,7 +295,7 @@ public class AllEventsFragment extends SupportMapFragment implements OnMapReadyC
             double lng = Double.parseDouble(latLng[1]);
 
             Marker pin = mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).title(event.getName()));
-            eventMarkerMap.put(event, pin);
+            eventMarkerMap.put(pin, event);
         }
     }
 
@@ -282,6 +309,131 @@ public class AllEventsFragment extends SupportMapFragment implements OnMapReadyC
             }
         } catch (Exception e) {}
         return output;
+    }
+
+    @Override
+    public void onJoinedEventItemClick(int position) {
+        viewEvent(allEvents.get(position));
+    }
+
+    private void viewEvent(Event event) {
+        Event selectedEvent = event;
+
+        dialogBuilder = new AlertDialog.Builder(parent);
+        final View popupView = getLayoutInflater().inflate(R.layout.create_event_dialog, null);
+
+        // init views
+        initDialogViews(popupView);
+
+        createEventDialogTitle.setText(selectedEvent.getName()); // set title to the dialog
+
+        deleteEventBTN.setVisibility(View.GONE);
+
+        eventNameCreateEDialog.setVisibility(View.GONE);
+
+        joinEventBTN.setText("Join");
+//        joinEventBTN.getBackground().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC);
+        if (event.getCreator().equals(userDataRepository.getUserID())) {
+            joinEventBTN.setText("Created");
+            joinEventBTN.setEnabled(false);
+        } else {
+            for (String attendees : event.getAttendees().values()) {
+                if (attendees.equals(userDataRepository.getUserID())) {
+                    joinEventBTN.setText("Joined");
+                    joinEventBTN.setEnabled(false);
+                }
+            }
+        }
+
+//        joinEventBTN.setBackgroundColor(getResources().getColor(R.color.green));
+
+        // Make edit text views read-only
+        eventNameCreateEDialog.setFocusable(false);
+        eventDescCreateEDialog.setFocusable(false);
+        eventCapacityCreateEDialog.setFocusable(false);
+
+        // Set existing event data to the fields in the dialog
+        setDataToDialogViews(selectedEvent);
+
+        // Acts as Leave event btn
+        joinEventBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                userDataRepository.joinEvent(selectedEvent);
+
+                Toast.makeText(parent, "Event joined successfully!", Toast.LENGTH_SHORT).show();
+
+                dialog.dismiss();
+            }
+        });
+
+        // show dialog
+        dialogBuilder.setView(popupView);
+        dialog = dialogBuilder.create();
+        dialog.show();
+    }
+
+    private void initDialogViews(View popupView) {
+        this.createEventDialogTitle = popupView.findViewById(R.id.createEventDialogTitle);
+        this.eventNameCreateEDialog = popupView.findViewById(R.id.createEventDialogEventName);
+        this.eventDescCreateEDialog = popupView.findViewById(R.id.createEventDialogEventDesc);
+        this.eventLocCreateEDialog = popupView.findViewById(R.id.createEventDialogEventLoc);
+        this.eventDateCreateEDialog = popupView.findViewById(R.id.createEventDialogEventDate);
+        this.eventTimeCreateEDialog = popupView.findViewById(R.id.createEventDialogEventTime);
+        this.eventCapacityCreateEDialog = popupView.findViewById(R.id.createEventDialogEventCapacity);
+        this.joinEventBTN = popupView.findViewById(R.id.createEventDialogCreateEventBTN);
+        this.deleteEventBTN = popupView.findViewById(R.id.createEventDialogDeleteEventBTN);
+        this.categorySpinner = popupView.findViewById(R.id.spinner);
+
+        String[] categories = new String[] {"Party", "Sport", "Culture", "Food", "Drinks", "Other"};
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(parent, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, categories);
+        arrayAdapter.setDropDownViewResource(androidx.appcompat.R.layout.support_simple_spinner_dropdown_item);
+        categorySpinner.setAdapter(arrayAdapter);
+        categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String value = parent.getItemAtPosition(position).toString();
+
+                categorySpinner.setSelection(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    private void setDataToDialogViews(Event selectedEvent) {
+        eventNameCreateEDialog.setText(selectedEvent.getName());
+        eventDescCreateEDialog.setText(selectedEvent.getDescription());
+        eventLocCreateEDialog.setText(selectedEvent.getLocation());
+        eventDateCreateEDialog.setText(selectedEvent.getDate());
+        eventTimeCreateEDialog.setText(selectedEvent.getTime());
+        eventCapacityCreateEDialog.setText(Integer.toString(selectedEvent.getCapacity()));
+        int index = 0;
+        switch (selectedEvent.getCategory()) {
+            case "Party":
+                index = 0;
+                break;
+            case "Sport":
+                index = 1;
+                break;
+            case "Culture":
+                index = 2;
+                break;
+            case "Food":
+                index = 3;
+                break;
+            case "Drinks":
+                index = 4;
+                break;
+            case "Other":
+                index = 5;
+                break;
+        }
+        categorySpinner.setSelection(index);
+        categorySpinner.setEnabled(false);
     }
 
     private void updateLocationUI() {
@@ -349,8 +501,5 @@ public class AllEventsFragment extends SupportMapFragment implements OnMapReadyC
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    @Override
-    public void onJoinedEventItemClick(int position) {
 
-    }
 }
