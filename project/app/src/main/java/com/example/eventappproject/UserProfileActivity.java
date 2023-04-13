@@ -32,6 +32,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Locale;
+
 public class UserProfileActivity extends AppCompatActivity implements UserDataListener {
 
     /* Views */
@@ -61,6 +63,17 @@ public class UserProfileActivity extends AppCompatActivity implements UserDataLi
     private EditText passwordDeleteUser;
     private Button deleteUserDeleteDialog;
 
+    /* Update user data dialog views */
+    private EditText newNameET;
+    private Button updateNewNameBTN;
+    private EditText newEmailET;
+    private EditText newEmailCurrentPasswordET;
+    private Button updateNewEmailBTN;
+    private EditText newPasswordET;
+    private EditText repeatNewPasswordET;
+    private EditText newPasswordCurrentPasswordET;
+    private Button updateNewPasswordBTN;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,7 +102,6 @@ public class UserProfileActivity extends AppCompatActivity implements UserDataLi
             helloUserTV.setText("Hello, " + user.getName() + "!");
             userNameTV.setText("Name: " + user.getName());
             userEmailTV.setText("Email: " + user.getEmail());
-            userDescTV.setText("Description: " + user.getDescription());
         }
 
         // Configure navigation bar
@@ -132,6 +144,13 @@ public class UserProfileActivity extends AppCompatActivity implements UserDataLi
             @Override
             public void onClick(View v) {
                 showSnackBar();;
+            }
+        });
+
+        updateDataBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openChangeUserDataDialog();
             }
         });
     }
@@ -256,8 +275,132 @@ public class UserProfileActivity extends AppCompatActivity implements UserDataLi
             helloUserTV.setText("Hello, " + user.getName() + "!");
             userNameTV.setText("Name: " + user.getName());
             userEmailTV.setText("Email: " + user.getEmail());
-            userDescTV.setText("Description: " + user.getDescription());
         }
+    }
+
+    private void openChangeUserDataDialog() {
+        dialogBuilder = new AlertDialog.Builder(this);
+        final View popupView = getLayoutInflater().inflate(R.layout.update_user_data, null);
+
+        changeNewNameFunctionality(popupView);
+        changeNewEmailFunctionality(popupView);
+        changeNewPasswordFunctionality(popupView);
+
+        // show dialog
+        dialogBuilder.setView(popupView);
+        dialog = dialogBuilder.create();
+        dialog.show();
+    }
+
+    private void changeNewNameFunctionality(View popupView) {
+        this.newNameET = popupView.findViewById(R.id.editTextTextPersonName);
+        this.updateNewNameBTN = popupView.findViewById(R.id.button);
+
+        updateNewNameBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String newName = newNameET.getText().toString().trim();
+                if (newName.isEmpty()) {
+                    newNameET.setError("Input new name!");
+                    return;
+                }
+
+                user.setName(newName);
+                dbReferenceUsers.child(user.getDbID()).setValue(user);
+
+                dialog.dismiss();
+                Toast.makeText(UserProfileActivity.this, "Name updated successfully!", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void changeNewEmailFunctionality(View popupView) {
+        this.newEmailET = popupView.findViewById(R.id.editTextTextPersonName2);
+        this.newEmailCurrentPasswordET = popupView.findViewById(R.id.editTextTextPassword2);
+        this.updateNewEmailBTN = popupView.findViewById(R.id.button2);
+
+        updateNewEmailBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String newEmail = newEmailET.getText().toString().trim();
+                String currentPassword = newEmailCurrentPasswordET.getText().toString().trim();
+
+                if (newEmail.isEmpty()) {
+                    newEmailET.setError("You should input email!");
+                    return;
+                } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(newEmail).matches()) {
+                    newEmailET.setError("You should input valid email!");
+                    return;
+                }
+
+                if (currentPassword.isEmpty()) {
+                    newEmailCurrentPasswordET.setError("Input current password!");
+                    return;
+                }
+
+                AuthCredential credential = EmailAuthProvider.getCredential(user.getEmail(), currentPassword);
+
+                FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
+                fUser.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (!task.isSuccessful()) {
+                            Toast.makeText(UserProfileActivity.this, "Wrong credentials", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        user.setEmail(newEmail);
+                        dbReferenceUsers.child(user.getDbID()).setValue(user);
+                        fUser.updateEmail(newEmail);
+                        dialog.dismiss();
+                        Toast.makeText(UserProfileActivity.this, "Email updated successfully!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+    }
+    
+    private void changeNewPasswordFunctionality(View popupView) {
+        this.newPasswordET = popupView.findViewById(R.id.editTextTextPassword3);
+        this.repeatNewPasswordET = popupView.findViewById(R.id.editTextTextPassword4);
+        this.newPasswordCurrentPasswordET = popupView.findViewById(R.id.editTextTextPassword5);
+        this.updateNewPasswordBTN = popupView.findViewById(R.id.button3);
+        
+        updateNewPasswordBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
+                String newPassword = newPasswordET.getText().toString().trim();
+                String repeatNewPassword = repeatNewPasswordET.getText().toString().trim();
+                String currentPassword = newPasswordCurrentPasswordET.getText().toString().trim();
+
+                if (newPassword.isEmpty() || newPassword.length() < 6) {
+                    newPasswordET.setError("Password should have length of at least 6 characters!");
+                    return;
+                }
+                if (repeatNewPassword.isEmpty()) {
+                    repeatNewPasswordET.setError("You should repeat your password!");
+                    return;
+                } else if (!repeatNewPassword.equals(newPassword)) {
+                    repeatNewPasswordET.setError("Your password should match the field above!");
+                    return;
+                }
+                if (currentPassword.isEmpty()) {
+                    newPasswordCurrentPasswordET.setError("Input current password!");
+                    return;
+                }
+
+                AuthCredential credential = EmailAuthProvider.getCredential(user.getEmail(), currentPassword);
+                fUser.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        fUser.updatePassword(newPassword);
+                        dialog.dismiss();
+                        Toast.makeText(UserProfileActivity.this, "Password updated successfully1", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
     }
 
     @Override
