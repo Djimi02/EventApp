@@ -8,6 +8,7 @@ import android.location.Location;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -97,6 +98,7 @@ public class AllEventsFragment extends SupportMapFragment implements OnMapReadyC
     private Button joinEventBTN;
     private Button deleteEventBTN;
     private Spinner categorySpinner;
+    private CardView attendeeCardView;
 
     /* Maps */
     GoogleMap mMap;
@@ -384,6 +386,8 @@ public class AllEventsFragment extends SupportMapFragment implements OnMapReadyC
         this.joinEventBTN = popupView.findViewById(R.id.createEventDialogCreateEventBTN);
         this.deleteEventBTN = popupView.findViewById(R.id.createEventDialogDeleteEventBTN);
         this.categorySpinner = popupView.findViewById(R.id.spinner);
+        this.attendeeCardView = popupView.findViewById(R.id.attendeeCardView);
+        this.attendeeCardView.setVisibility(View.GONE);
 
         String[] categories = new String[] {"Party", "Sport", "Culture", "Food", "Drinks", "Other"};
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(parent, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, categories);

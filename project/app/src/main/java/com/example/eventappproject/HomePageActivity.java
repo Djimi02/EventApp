@@ -7,6 +7,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,6 +28,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.eventappproject.adapters.AttendeeAdapter;
 import com.example.eventappproject.adapters.UserCreatedEventAdapter;
 import com.example.eventappproject.adapters.UserJoinedEventAdapter;
 import com.example.eventappproject.interfaces.UserCreatedEventRecyclerViewInterface;
@@ -76,6 +78,8 @@ public class HomePageActivity extends AppCompatActivity implements UserDataListe
     private Button createEventBTNCreateEDialog;
     private Button deleteEventBTNCreateEDialog;
     private Spinner categorySpinner;
+    private RecyclerView attendeesRV;
+    private CardView attendeeCardView;
 
     /* Helpers */
     ActivityResultLauncher<Intent> activityResultLauncher;
@@ -187,6 +191,7 @@ public class HomePageActivity extends AppCompatActivity implements UserDataListe
 
         // init views
         initDialogViews(popupView);
+        this.attendeeCardView.setVisibility(View.GONE);
 
         createEventDialogTitle.setText("Create Event"); // set title of the dialog
 
@@ -256,7 +261,10 @@ public class HomePageActivity extends AppCompatActivity implements UserDataListe
 
         // init views
         initDialogViews(popupView);
-
+        AttendeeAdapter attendeeAdapter = new AttendeeAdapter(selectedEvent, new ArrayList<String>(selectedEvent.getAttendees().keySet()), this);
+        this.attendeesRV.setAdapter(attendeeAdapter);
+        this.attendeesRV.setLayoutManager(new LinearLayoutManager(this));
+;
         createEventDialogTitle.setText("Update Event"); // set title to the dialog
 
         createEventBTNCreateEDialog.setText("Update event");
@@ -366,6 +374,7 @@ public class HomePageActivity extends AppCompatActivity implements UserDataListe
 
         // init views
         initDialogViews(popupView);
+        this.attendeeCardView.setVisibility(View.GONE);
 
         createEventDialogTitle.setText(selectedEvent.getName()); // set title to the dialog
 
@@ -402,6 +411,14 @@ public class HomePageActivity extends AppCompatActivity implements UserDataListe
         dialog.show();
     }
 
+    @Override
+    public void onAttendeeRemoved(Event event, String attendeeID) {
+        userDataRepository.kickAttendee(event, attendeeID);
+        int currentCap = Integer.parseInt(eventCapacityCreateEDialog.getText().toString().trim());
+        currentCap++;
+        eventCapacityCreateEDialog.setText(Integer.toString(currentCap));
+    }
+
     /**
      * This method is called from this.userDataRepository when the data about the created events
      * has changed. Note that this.loggedUserCreatedEvents is a reference to
@@ -424,6 +441,8 @@ public class HomePageActivity extends AppCompatActivity implements UserDataListe
         this.createEventBTNCreateEDialog = popupView.findViewById(R.id.createEventDialogCreateEventBTN);
         this.deleteEventBTNCreateEDialog = popupView.findViewById(R.id.createEventDialogDeleteEventBTN);
         this.categorySpinner = popupView.findViewById(R.id.spinner);
+        this.attendeesRV = popupView.findViewById(R.id.attendeesRecycler);
+        this.attendeeCardView = popupView.findViewById(R.id.attendeeCardView);
 
         String[] categories = new String[] {"Party", "Sport", "Culture", "Food", "Drinks", "Other"};
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(HomePageActivity.this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, categories);

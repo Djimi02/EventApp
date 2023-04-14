@@ -327,4 +327,17 @@ public class UserDataRepository {
             leaveEvent(event);
         }
     }
+
+    /**
+     *  Removes a given user from a given event.
+     * @param event - event to remove the given user from
+     * @param attendeeID - the user to be removed from given event
+     */
+    public void kickAttendee(Event event, String attendeeID) {
+        event.setCapacity(event.getCapacity() + 1);
+        event.removeAttendee(attendeeID);
+        dbReferenceEvents.child(event.getDbID()).setValue(event);
+
+        dbReferenceUsers.child(attendeeID).child("joinedEvents").child(event.getDbID()).setValue(null);
+    }
 }

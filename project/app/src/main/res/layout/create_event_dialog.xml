@@ -6,6 +6,48 @@
     android:layout_height="match_parent"
     android:visibility="visible">
 
+    <androidx.cardview.widget.CardView
+        android:id="@+id/attendeeCardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:backgroundTint="@color/grey"
+        app:cardCornerRadius="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/createEventDialogEventCapacity">
+
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Attendees"
+            android:textSize="20sp" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:orientation="vertical">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/attendeesRecycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+        </ScrollView>
+    </androidx.cardview.widget.CardView>
+
     <TextView
         android:id="@+id/createEventDialogTitle"
         android:layout_width="wrap_content"
@@ -91,18 +133,18 @@
         android:id="@+id/createEventDialogCreateEventBTN"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="8dp"
         android:backgroundTint="#26A603"
         android:text="Create event"
         app:layout_constraintEnd_toEndOf="@+id/createEventDialogEventCapacity"
         app:layout_constraintStart_toStartOf="@+id/createEventDialogEventCapacity"
-        app:layout_constraintTop_toBottomOf="@+id/createEventDialogEventCapacity" />
+        app:layout_constraintTop_toBottomOf="@+id/attendeeCardView" />
 
     <Button
         android:id="@+id/createEventDialogDeleteEventBTN"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="24dp"
         android:backgroundTint="#AE1C1C"
         android:text="Delete event"
