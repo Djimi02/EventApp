@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/custom_dialog">
 
     <EditText
         android:id="@+id/editTextTextPersonName"
@@ -23,6 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="update name"
+        android:backgroundTint="@color/blue"
         app:layout_constraintEnd_toEndOf="@+id/editTextTextPersonName"
         app:layout_constraintStart_toStartOf="@+id/editTextTextPersonName"
         app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName" />
@@ -45,6 +47,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Update Email"
+        android:backgroundTint="@color/blue"
         app:layout_constraintEnd_toEndOf="@+id/editTextTextPersonName2"
         app:layout_constraintStart_toStartOf="@+id/editTextTextPersonName2"
         app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword2" />
@@ -104,6 +107,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
         android:text="Update Password"
+        android:backgroundTint="@color/blue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/editTextTextPassword5"
         app:layout_constraintStart_toStartOf="@+id/editTextTextPassword5"

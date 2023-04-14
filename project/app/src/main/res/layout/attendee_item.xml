@@ -15,24 +15,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/attendeeEmailTV"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="email"
-        app:layout_constraintBottom_toBottomOf="@+id/attendeeNameTV"
-        app:layout_constraintEnd_toStartOf="@+id/removeAttendeeBTN"
-        app:layout_constraintStart_toEndOf="@+id/attendeeNameTV"
-        app:layout_constraintTop_toTopOf="@+id/attendeeNameTV" />
-
     <ImageButton
         android:id="@+id/removeAttendeeBTN"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:backgroundTint="#E11C1C"
-        app:layout_constraintBottom_toBottomOf="@+id/attendeeEmailTV"
+        android:backgroundTint="@color/pink"
+        app:layout_constraintBottom_toBottomOf="@+id/attendeeNameTV"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/attendeeEmailTV"
+        app:layout_constraintTop_toTopOf="@+id/attendeeNameTV"
         app:srcCompat="@drawable/x_image" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,6 +4,8 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 
 import androidx.annotation.NonNull;
@@ -334,7 +336,6 @@ public class AllEventsFragment extends SupportMapFragment implements OnMapReadyC
         eventNameCreateEDialog.setVisibility(View.GONE);
 
         joinEventBTN.setText("Join");
-//        joinEventBTN.getBackground().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC);
         if (event.getCreator().equals(userDataRepository.getUserID())) {
             joinEventBTN.setText("Created");
             joinEventBTN.setEnabled(false);
@@ -346,8 +347,6 @@ public class AllEventsFragment extends SupportMapFragment implements OnMapReadyC
                 }
             }
         }
-
-//        joinEventBTN.setBackgroundColor(getResources().getColor(R.color.green));
 
         // Make edit text views read-only
         eventNameCreateEDialog.setFocusable(false);
@@ -372,6 +371,7 @@ public class AllEventsFragment extends SupportMapFragment implements OnMapReadyC
         // show dialog
         dialogBuilder.setView(popupView);
         dialog = dialogBuilder.create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
     }
 

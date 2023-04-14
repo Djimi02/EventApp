@@ -40,7 +40,8 @@
                 android:id="@+id/homePageNavView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:menu="@menu/bottom_nav_menu" />
+                app:menu="@menu/bottom_nav_menu"
+                android:background="@color/grey"/>
 
         </androidx.cardview.widget.CardView>
 
@@ -54,7 +55,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:backgroundTint="@color/teal_200">
+            android:backgroundTint="@color/blue">
 
             <LinearLayout
                 android:id="@+id/searchBarLayout"
@@ -67,7 +68,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/baseline_menu_24"
-                    android:backgroundTint="@color/teal_200"/>
+                    android:backgroundTint="@color/blue"/>
 
                 <EditText
                     android:id="@+id/searchET"
@@ -85,7 +86,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:src="@drawable/baseline_search_24"
-                    android:backgroundTint="@color/teal_200"/>
+                    android:backgroundTint="@color/blue"/>
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
@@ -98,7 +99,8 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:menu="@menu/filter_menu"
-        tools:ignore="MissingConstraints" >
+        tools:ignore="MissingConstraints"
+        android:background="@color/beige">
 
     </com.google.android.material.navigation.NavigationView>
 

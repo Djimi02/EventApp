@@ -5,7 +5,8 @@
     android:id="@+id/createEvent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HomePageActivity">
+    tools:context=".HomePageActivity"
+    android:background="@color/beige">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/homePageCardView"
@@ -23,7 +24,8 @@
             android:id="@+id/homePageNavView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:menu="@menu/bottom_nav_menu" />
+            app:menu="@menu/bottom_nav_menu"
+            android:background="@color/grey"/>
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
@@ -125,6 +127,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:backgroundTint="@color/blue"
         android:text="Create event"
         app:layout_constraintEnd_toEndOf="@+id/cardView"
         app:layout_constraintStart_toStartOf="@+id/cardView"

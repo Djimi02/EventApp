@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SignInActivity">
+    tools:context=".SignInActivity"
+    android:background="@color/beige">
 
     <TextView
         android:id="@+id/textView"
@@ -33,6 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:backgroundTint="@color/grey"
         android:ems="10"
         android:hint="Email"
         android:inputType="textPersonName"
@@ -65,6 +67,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="Register"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="@+id/passwordTextLogin"
         app:layout_constraintTop_toBottomOf="@+id/passwordTextLogin" />
 
@@ -74,6 +77,7 @@
         android:layout_height="wrap_content"
         android:clickable="false"
         android:text="Login"
+        android:backgroundTint="@color/blue"
         app:layout_constraintBottom_toBottomOf="@+id/registerView"
         app:layout_constraintEnd_toEndOf="@+id/passwordTextLogin"
         app:layout_constraintHorizontal_bias="1.0"

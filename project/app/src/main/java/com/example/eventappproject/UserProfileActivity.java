@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -41,7 +43,6 @@ public class UserProfileActivity extends AppCompatActivity implements UserDataLi
     private TextView helloUserTV;
     private TextView userNameTV;
     private TextView userEmailTV;
-    private TextView userDescTV;
     private Button updateDataBTN;
     private Button logoutBTN;
     private Button deleteAccountBTN;
@@ -93,7 +94,6 @@ public class UserProfileActivity extends AppCompatActivity implements UserDataLi
         this.helloUserTV = findViewById(R.id.helloUserTV);
         this.userNameTV = findViewById(R.id.userNameTV);
         this.userEmailTV = findViewById(R.id.userEmailTV);
-        this.userDescTV = findViewById(R.id.userDescriptionTV);
         this.updateDataBTN = findViewById(R.id.updateDataBTN);
         this.logoutBTN = findViewById(R.id.logoutBTN);
         this.deleteAccountBTN = findViewById(R.id.deleteAccountBTN);
@@ -264,6 +264,7 @@ public class UserProfileActivity extends AppCompatActivity implements UserDataLi
         // show dialog
         dialogBuilder.setView(popupView);
         dialog = dialogBuilder.create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
     }
 
@@ -289,6 +290,7 @@ public class UserProfileActivity extends AppCompatActivity implements UserDataLi
         // show dialog
         dialogBuilder.setView(popupView);
         dialog = dialogBuilder.create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
     }
 

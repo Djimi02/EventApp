@@ -62,7 +62,6 @@ public class AttendeeAdapter extends RecyclerView.Adapter<AttendeeAdapter.ViewHo
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 User user = task.getResult().getValue(User.class);
                 holder.attendeeName.setText(user.getName());
-                holder.attendeeEmail.setText(user.getEmail());
             }
         });
     }
@@ -75,13 +74,11 @@ public class AttendeeAdapter extends RecyclerView.Adapter<AttendeeAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private TextView attendeeName;
-        private TextView attendeeEmail;
         private ImageButton removeAttendeeBTN;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             attendeeName = itemView.findViewById(R.id.attendeeNameTV);
-            attendeeEmail = itemView.findViewById(R.id.attendeeEmailTV);
             removeAttendeeBTN = itemView.findViewById(R.id.removeAttendeeBTN);
 
             removeAttendeeBTN.setOnClickListener(new View.OnClickListener() {

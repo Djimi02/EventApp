@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -242,6 +244,7 @@ public class HomePageActivity extends AppCompatActivity implements UserDataListe
         // show dialog
         dialogBuilder.setView(popupView);
         dialog = dialogBuilder.create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
     }
 
@@ -331,6 +334,7 @@ public class HomePageActivity extends AppCompatActivity implements UserDataListe
         // show dialog
         dialogBuilder.setView(popupView);
         dialog = dialogBuilder.create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
     }
 
@@ -408,6 +412,7 @@ public class HomePageActivity extends AppCompatActivity implements UserDataListe
         // show dialog
         dialogBuilder.setView(popupView);
         dialog = dialogBuilder.create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
     }
 

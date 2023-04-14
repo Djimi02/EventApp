@@ -5,7 +5,8 @@
     android:id="@+id/userProfileConstrLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UserProfileActivity">
+    tools:context=".UserProfileActivity"
+    android:background="@color/beige">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/homePageCardView"
@@ -23,7 +24,8 @@
             android:id="@+id/homePageNavView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:menu="@menu/bottom_nav_menu" />
+            app:menu="@menu/bottom_nav_menu"
+            android:background="@color/grey"/>
     </androidx.cardview.widget.CardView>
 
     <TextView
@@ -59,31 +61,23 @@
         app:layout_constraintStart_toStartOf="@+id/userNameTV"
         app:layout_constraintTop_toBottomOf="@+id/userNameTV" />
 
-    <TextView
-        android:id="@+id/userDescriptionTV"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="Description:"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@+id/userEmailTV"
-        app:layout_constraintTop_toBottomOf="@+id/userEmailTV" />
-
     <Button
         android:id="@+id/updateDataBTN"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
+        android:backgroundTint="@color/blue"
         android:text="Update data"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userDescriptionTV" />
+        app:layout_constraintTop_toBottomOf="@+id/userEmailTV" />
 
     <Button
         android:id="@+id/logoutBTN"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="LOGOUT"
+        android:backgroundTint="@color/blue"
         app:layout_constraintBottom_toTopOf="@+id/homePageCardView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.15"
@@ -95,7 +89,7 @@
         android:id="@+id/deleteAccountBTN"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/red"
+        android:backgroundTint="@color/pink"
         android:text="delete account"
         app:layout_constraintBottom_toTopOf="@+id/homePageCardView"
         app:layout_constraintEnd_toEndOf="parent"
