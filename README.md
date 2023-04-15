@@ -9,15 +9,13 @@ The mobile application is a powerful event planning tool. With this app, users c
 ## How to use
 ### Create an account if you do not have one or login
 
-![alt text](https://github.com/Djimi02/EventApp/blob/main/photos/SignUpPage.jpg | asd)
+<img src="https://github.com/Djimi02/EventApp/blob/main/photos/SignUpPage.jpg"  width=40% height=40%>
 
-<img src="https://github.com/Djimi02/EventApp/blob/main/photos/SignUpPage.jpg"  width=50% height=50%>
-
-![alt text](https://github.com/Djimi02/EventApp/blob/main/photos/LoginPage.jpg)
+<img src="https://github.com/Djimi02/EventApp/blob/main/photos/LoginPage.jpg"  width=40% height=40%>
 
 ### You are prompted to the Homepage. You can use the navigation bar at the bottom to move through the different pages in the app.
 
-![alt text](https://github.com/Djimi02/EventApp/blob/main/photos/HomePage.jpg)
+<img src="https://github.com/Djimi02/EventApp/blob/main/photos/HomePage.jpg"  width=40% height=40%>
 
 ### If you go to the User Profile page, this is the place where you can:
 * #### Change your user name
@@ -25,7 +23,7 @@ The mobile application is a powerful event planning tool. With this app, users c
 * #### Log out
 * #### Delete your account
 
-![alt text](https://github.com/Djimi02/EventApp/blob/main/photos/UserProfilePage.jpg)
+<img src="https://github.com/Djimi02/EventApp/blob/main/photos/UserProfilePage.jpg"  width=40% height=40%>
 
 ### If you go to Homepage -> Create Event, you will se the event creationg form, which consist of:
 * #### Event name
@@ -35,27 +33,27 @@ The mobile application is a powerful event planning tool. With this app, users c
 * #### Event time - click on the field to select tge time from a clock
 * #### Event capacity limit
 
-![alt text](https://github.com/Djimi02/EventApp/blob/main/photos/CreateEventDialog.jpg)
+<img src="https://github.com/Djimi02/EventApp/blob/main/photos/CreateEventDialog.jpg"  width=40% height=40%>
 
 ### If you go to Homepage and click on event item that you have created, you will be able to change:
 * #### Event details
 * #### See a list of the users that have joined that event
 * #### Remove unwanted users by clicking on the pink cross on the side of the user
 
-![alt text](https://github.com/Djimi02/EventApp/blob/main/photos/ManageEventDialog.jpg)
+<img src="https://github.com/Djimi02/EventApp/blob/main/photos/ManageEventDialog.jpg"  width=40% height=40%>
 
 ### If you go to Map page, you will be prompted to googple map page, where you will see yourself as blue dot on the map and the existing events as red pins on the map.
 
-![alt text](https://github.com/Djimi02/EventApp/blob/main/photos/SearchEventOnMap.jpg)
+<img src="https://github.com/Djimi02/EventApp/blob/main/photos/SearchEventOnMap.jpg"  width=40% height=40%>
 
 ### By clicking on a pin on the map you will see a dialog containing the information for that particular event. Furthermore users can join it, by clicking the blue button Join, positioned at the bottom.
 
-![alt text](https://github.com/Djimi02/EventApp/blob/main/photos/ViewUnjoinedEvent.jpg)
+<img src="https://github.com/Djimi02/EventApp/blob/main/photos/ViewUnjoinedEvent.jpg"  width=40% height=40%>
 
 ### Moreover, users can open the side menu in order to filter the events on the map based on their category.
 
-![alt text](https://github.com/Djimi02/EventApp/blob/main/photos/FilterEventsByCategory.jpg)
+<img src="https://github.com/Djimi02/EventApp/blob/main/photos/FilterEventsByCategory.jpg"  width=40% height=40%>
 
 ### Once joined an event, an event item in Homepage under Joined Events should appear. By clicking on that item, we can see the event details. Users can use the pink Leave Event button to leave the event.
 
-![alt text](https://github.com/Djimi02/EventApp/blob/main/photos/ViewJoinedEventDialog.jpg)
+<img src="https://github.com/Djimi02/EventApp/blob/main/photos/ViewJoinedEventDialog.jpg"  width=40% height=40%>
