@@ -9,7 +9,9 @@ The mobile application is a powerful event planning tool. With this app, users c
 ## How to use
 ### Create an account if you do not have one or login
 
-![alt text](https://github.com/Djimi02/EventApp/blob/main/photos/SignUpPage.jpg)
+![alt text](https://github.com/Djimi02/EventApp/blob/main/photos/SignUpPage.jpg | asd)
+
+<img src="https://github.com/Djimi02/EventApp/blob/main/photos/SignUpPage.jpg"  width=50% height=50%>
 
 ![alt text](https://github.com/Djimi02/EventApp/blob/main/photos/LoginPage.jpg)
 
