@@ -25,7 +25,7 @@ The mobile application is a powerful event planning tool. With this app, users c
 
 <img src="https://github.com/Djimi02/EventApp/blob/main/photos/UserProfilePage.jpg"  width=40% height=40%>
 
-### If you go to Homepage -> Create Event, you will se the event creationg form, which consist of:
+### If you go to Homepage -> Create Event, you will see the event creationg form, which consist of:
 * #### Event name
 * #### Event description
 * #### Event location - click on the field to select the location from the map
